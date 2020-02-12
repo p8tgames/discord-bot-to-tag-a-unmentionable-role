@@ -1,4 +1,5 @@
 # We don't need many libraries for this (yet)
+import asyncio
 from discord.ext import commands
 from discord.utils import get
 import sys
@@ -27,10 +28,10 @@ bot.remove_command('help')
 allowit = [130838223067807745, 275678584712986624]
 
 # The ID of the role that should get the Notification
-roleid = 676380075276501052
+roleid = 676367268669685760
 
 # Fill in the streamer's name and link
-StreamerName = "STREAMER"
+StreamerName = "Streamer Name"
 StreamerLink = "https://www.twitch.tv/___"
 
 
@@ -46,7 +47,7 @@ async def twitch(ctx, *, message=StreamerName + " is live! Go watch his stream!"
     # Check if the user who's running the command is in the allowit list
     role = get(ctx.guild.roles, id=roleid)
     if ctx.author.id not in allowit:  # Output if it isn't
-        await ctx.send("> " + ctx.message + "\nYou don't have permission to run this command!")
+        await ctx.send("> You don't have permission to run this command!")
     else:  # Output if it is
 
         # Make the Role mentionable
@@ -55,6 +56,37 @@ async def twitch(ctx, *, message=StreamerName + " is live! Go watch his stream!"
         await ctx.send("<@&" + str(roleid) + "> " + str(message) + " " + StreamerLink)
         # Make it un-mentionable instantly after
         await role.edit(mentionable=False, reason=f"[ {ctx.author} ] twitch command - Disable mentionable Role")
+
+
+@bot.command()  # The twitch test
+async def twitchtest(ctx, *, message=StreamerName + " is live! Go watch his stream!"):
+    # message: the message tag, the default Message is set here.
+    # Check if the user who's running the command is in the allowit list
+    role = get(ctx.guild.roles, id=roleid)
+    if ctx.author.id not in allowit:  # Output if it isn't
+        await ctx.send("> You don't have permission to run this command!")
+    else:  # Output if it is
+        msg = "STARTING TEST."
+        message = await ctx.send(msg)
+        await role.edit(mentionable=True, reason=f"[ {ctx.author} ] twitch command - Enable mentionable Role")
+        msg = msg + "\n1. Changed" + str(roleid) + " to mentionable."
+        await message.edit(content=msg)
+        await role.edit(mentionable=False, reason=f"[ {ctx.author} ] twitch command - Disable mentionable Role")
+        msg = msg + "\n2. Changed" + str(roleid) + " to unmentionable."
+        await message.edit(content=msg)
+
+
+@bot.command()  # The status command
+async def status(ctx):
+    # message: the message tag, the default Message is set here.
+    # Check if the user who's running the command is in the allowit list
+    if ctx.author.id not in allowit:  # Output if it isn't
+        await ctx.send("> You don't have permission to run this command!")
+    else:  # Output if it is
+        message = await ctx.send("Yea, I'm online. The currently set RoleID is " + str(
+            roleid) + " and my Token starts with the characters " + TOKEN[:4] + ".")
+        await asyncio.sleep(2)
+        await message.edit(content="Yea, I'm online. The currently set RoleID is " + str(roleid) + ".")
 
 
 bot.run(TOKEN)
