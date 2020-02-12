@@ -59,8 +59,7 @@ async def twitch(ctx, *, message=StreamerName + " is live! Go watch his stream!"
 
 
 @bot.command()  # The twitch test
-async def twitchtest(ctx, *, message=StreamerName + " is live! Go watch his stream!"):
-    # message: the message tag, the default Message is set here.
+async def twitchtest(ctx):
     # Check if the user who's running the command is in the allowit list
     role = get(ctx.guild.roles, id=roleid)
     if ctx.author.id not in allowit:  # Output if it isn't
